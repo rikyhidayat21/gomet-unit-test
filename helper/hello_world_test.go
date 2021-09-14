@@ -43,7 +43,73 @@ TestMain hanya dieksekusi sekali per golang pacckage, bukan setiap kali function
 
 **Table Test**
 digunakan untuk membuat 1 function, kemudian memasukan request dan expectasi banyak data
+
+**Benchmark**
+
+nama file : BenchmarkXXX
+menjalankan benchmark
+
+go test -v -bench=.     => semua unit test di running
+go test -v -run="NotMatchUnitTest" -bench=. 		=> running semua benchmark
+go test -v -run="NotMatchUnitTest" -bench=BenchmarkHelloWorld 			=> running spesifik benchmark
+
+running dari root project beserta unit test nya => go test -v -bench=. ./...
+running dari root project TANPA unit test nya => go test -v -run=TestNotMatch -bench=. ./...
+
+untuk benchmark gunakanlah tabel benchmark
 */
+
+func BenchmarkTable(b *testing.B) {
+	benchmarks := []struct{
+		name string
+		request string
+	} {
+		{
+			name: "Riky",
+			request: "Riky",
+		},
+		{
+			name: "Hidayat",
+			request: "Hidayat",
+		},
+		{
+			name: "Riky Hidayat Sastra Pradja",
+			request: "Riky Hidayat Sastra Pradja",
+		},
+	}
+
+	for _, benchmark := range benchmarks {
+		b.Run(benchmark.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				HelloWorld(benchmark.request)
+			}
+		})
+	}
+}
+
+func BenchmarkSub(b *testing.B) {
+	b.Run("Riky", func(b *testing.B) {
+		for i := 0; i < b.N ; i++ {
+			HelloWorld("Riky")
+		}
+	})
+	b.Run("Hidayat", func(b *testing.B) {
+		for i := 0; i < b.N ; i++ {
+			HelloWorld("Hidayat")
+		}
+	})
+}
+
+func BenchmarkHelloWorld(b *testing.B) {
+	for i := 0; i < b.N ; i++ {
+		HelloWorld("Riky")
+	}
+}
+func BenchmarkHelloWorldHidayat(b *testing.B) {
+	for i := 0; i < b.N ; i++ {
+		HelloWorld("Hidayat")
+	}
+}
 
 func TestTableHelloWorld(t *testing.T) {
 	tests := []struct {
