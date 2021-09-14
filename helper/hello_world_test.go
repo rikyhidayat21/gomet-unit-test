@@ -1,6 +1,9 @@
 package helper
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 /*
 Selain aturan nama file, di Golang juga sudah diatur untuk nama function unit test
@@ -12,12 +15,31 @@ Selanjutnya harus memiliki parameter (t *testing.T) dan tidak mengembalikan retu
 go test -v => running test di package tertentu
 go test -v -run=FUNCTIONTEST => running test di function tertentu
 go test ./... => running test di root project
+
+jangan menggunakan panic untuk menggagalkan test, tapi menggunakan Fail(), FailNow(), Error(), dan Fatal()
+
+Fail() => akan menggagalkan unit test, namun tetap melanjutkan eksekusi unit test. Namun diakhir ketika selsai, maka unit test tersebut dianggap gagal
+FailNow() => akan menggagalkan unit test saat itu juga, tanpa melanjutkan eksekusi unit test
+Lebih baik menggunakan function dibawah:
+Error() => akan melakukan log error, kemudian menjalankan Fail()
+Fatal() => akan melakukan log error, kemudian menjalankan FailNow() sehingga unit test berhenti
 */
 
-func TestHelloWorld(t *testing.T) {
+func TestHelloWorldRiky(t *testing.T) {
 	result := HelloWorld("Riky")
 	if result != "Hello Riky" {
 		// unit test failed
-		panic("Result is not Hello Riky")
+		t.Error("Result should be Hello Riky")
 	}
+
+	fmt.Println("TestHelloWorldRiky Done")
+}
+func TestHelloWorldHidayat(t *testing.T) {
+	result := HelloWorld("Hidayat")
+	if result != "Hello Hidayat" {
+		// unit test failed
+		t.Fatal("Result should be Hello Riky")
+	}
+
+	fmt.Println("TestHelloWorldHidayat Done")
 }
