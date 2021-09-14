@@ -3,6 +3,8 @@ package helper
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 /*
@@ -23,6 +25,9 @@ FailNow() => akan menggagalkan unit test saat itu juga, tanpa melanjutkan ekseku
 Lebih baik menggunakan function dibawah:
 Error() => akan melakukan log error, kemudian menjalankan Fail()
 Fatal() => akan melakukan log error, kemudian menjalankan FailNow() sehingga unit test berhenti
+
+***Assertion***
+downlaod 3rd party using testify
 */
 
 func TestHelloWorldRiky(t *testing.T) {
@@ -42,4 +47,11 @@ func TestHelloWorldHidayat(t *testing.T) {
 	}
 
 	fmt.Println("TestHelloWorldHidayat Done")
+}
+
+func TestHelloWorldAssert (t *testing.T) {
+	result := HelloWorld("Riky")
+	assert.Equal(t, "Hello Riky", result, "Result should be 'Hello Riky'")
+
+	fmt.Println("Executed")
 }
