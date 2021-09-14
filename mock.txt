@@ -1,0 +1,21 @@
+1. bikin package entity
+2. bikin category.go
+  bikin struct
+
+  
+3. bikin package repository (untuk bikin kontraknya dulu) [bikin category repository untuk connect ke DB]
+  bikin type interface CategoryRepository
+    bikin function FindById(id string) *entity.Category
+  
+selanjutnya bikin servicenya
+idealnya, membuat service dengan interface
+
+4. bikin package service
+5. bikin file category_service.go
+  type CategoryService struct {
+    Repository   repository.CategoryRepository
+  }
+
+  kemudian tambahkan sebuah method ke category_service nya tersebut
+
+baru masuk ke mock 
