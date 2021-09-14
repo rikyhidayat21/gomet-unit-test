@@ -2,9 +2,11 @@ package helper
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 /*
@@ -28,7 +30,74 @@ Fatal() => akan melakukan log error, kemudian menjalankan FailNow() sehingga uni
 
 ***Assertion***
 downlaod 3rd party using testify
+
+***Skip Test***
+t.Skip("args")
+
+**Before and After Test**
+testing.M => digunakan untuk mengatur eksekusi unit test, hal ini bisa digunakan untuk before dan after di unit test
+
+Untuk membuatnya harus function dengan nama TestMain, dengan parameter testing.M
+Jika terdapat funcion TestMain tersebut, maka secara otomatis Golang akan mengeksekusi function setiap kali
+TestMain hanya dieksekusi sekali per golang pacckage, bukan setiap kali function ada
+
+**Table Test**
+digunakan untuk membuat 1 function, kemudian memasukan request dan expectasi banyak data
 */
+
+func TestTableHelloWorld(t *testing.T) {
+	tests := []struct {
+		name string
+		request string
+		expected string
+	}{
+		{
+			name: "riky",
+			request: "riky",
+			expected: "Hello riky",
+		},
+		{
+			name: "hidayat",
+			request: "hidayat",
+			expected: "Hello hidayat",
+		},
+		{
+			name: "paten",
+			request: "paten",
+			expected: "Hello paten",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := HelloWorld(test.request)
+			require.Equal(t, test.expected, result)
+		})
+	}
+}
+
+func TestSubTest(t *testing.T) {
+	t.Run("Riky", func(t *testing.T) {
+		result := HelloWorld("Riky")
+		require.Equal(t, "Hello Riky", result, "Result must be 'Hello Riky'")
+	})
+
+	t.Run("Hidayat", func(t *testing.T) {
+		result := HelloWorld("Hidayat")
+		require.Equal(t, "Hello Hidayat", result, "Result must be 'Hello Hidayat'")
+	})
+}
+
+func TestMain(m *testing.M) {
+	// before => disini bisa untuk koneksi ke database dan lain lain
+	fmt.Println("BEFORE unit test")
+
+	m.Run()
+
+	// after
+	fmt.Println("After unit test")
+
+}
 
 func TestHelloWorldRiky(t *testing.T) {
 	result := HelloWorld("Riky")
@@ -54,4 +123,13 @@ func TestHelloWorldAssert (t *testing.T) {
 	assert.Equal(t, "Hello Riky", result, "Result should be 'Hello Riky'")
 
 	fmt.Println("Executed")
+}
+
+func TestSkip(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Can't run on windows OS")
+	}
+
+	result := HelloWorld("Riky")
+	require.Equal(t, "Hello Riky", result, "Result should be 'Hello Riky'")
 }
